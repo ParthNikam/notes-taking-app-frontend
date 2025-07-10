@@ -1,10 +1,18 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
+
+interface UserObject {
+  avatar: string;
+  email: string;
+  name: string;
+  id: string;
+}
+
 interface AuthContextType {
-  user: unknown;
+  user: UserObject | null;
   token: string | null;
-  login: (token: string, user?: unknown) => void;
+  login: (token: string, user?: UserObject) => void;
   logout: () => void;
   loading: boolean; 
 }
@@ -13,7 +21,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<unknown>(null);
+  const [user, setUser] = useState<UserObject | null>(null);
   const [loading, setLoading] = useState(true); 
 
   // store and retrieve token and user 
@@ -27,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 
   // Handles user login by storing the token and user info in state and localStorage
-  const login = (newToken: string, userObj?: unknown) => {
+  const login = (newToken: string, userObj?: UserObject) => {
     // Update token in state
     setToken(newToken);
     // Store token in localStorage if running in the browser
@@ -35,6 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // If user object is provided, update user in state and localStorage
     if (userObj) {
       setUser(userObj);
+      console.log("User Object: ", userObj);
       if (typeof window !== "undefined") localStorage.setItem("user", JSON.stringify(userObj));
     }
 
