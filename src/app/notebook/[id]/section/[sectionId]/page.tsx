@@ -98,7 +98,7 @@ export default function SectionPage() {
               </li>
             ))}
             {creatingPage && (
-              <li key="creating-page" className="w-full border-2 border-blue-500 p-6 rounded-lg bg-blue-50">
+              <li key="creating-page" className="w-full border-2 border-blue-500 p-6 rounded-lg">
                 <input
                   className="w-full p-2 border border-blue-500 rounded"
                   value={newPageTitle}

@@ -19,8 +19,6 @@ export default function PageEditor() {
   const [isEditing, setIsEditing] = useState(false);
   const router = useRouter();
   const params = useParams();
-  const notebookId = params.id as string;
-  const sectionId = params.sectionId as string;
   const pageId = params.pageId as string;
 
   useEffect(() => {

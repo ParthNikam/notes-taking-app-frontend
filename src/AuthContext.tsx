@@ -2,17 +2,19 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface AuthContextType {
-  user: any;
+  user: unknown;
   token: string | null;
-  login: (token: string, user?: any) => void;
+  login: (token: string, user?: unknown) => void;
   logout: () => void;
+  loading: boolean; 
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<unknown>(null);
+  const [loading, setLoading] = useState(true); 
 
   // store and retrieve token and user 
   useEffect(() => {
@@ -20,11 +22,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const storedUser = typeof window !== "undefined" ? localStorage.getItem("user") : null;
     if (storedToken) setToken(storedToken);
     if (storedUser) setUser(JSON.parse(storedUser));
+    setLoading(false); 
   }, []);
 
 
   // Handles user login by storing the token and user info in state and localStorage
-  const login = (newToken: string, userObj?: any) => {
+  const login = (newToken: string, userObj?: unknown) => {
     // Update token in state
     setToken(newToken);
     // Store token in localStorage if running in the browser
@@ -50,7 +53,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

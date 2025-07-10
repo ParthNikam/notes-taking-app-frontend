@@ -5,16 +5,6 @@ import { BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 
 
-interface Section {
-  title: string;
-  id: string;
-}
-
-interface Notebook {
-  title: string;
-  id: string;
-  sections: Section[];
-}
 
 interface Notebooks {
   title: string;
@@ -24,7 +14,7 @@ interface Notebooks {
 
 
 export default function Page() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<unknown>(null);
   const router = useRouter();
   const [notebooks, setNotebooks] = useState<Notebooks[]>([])
   const [creatingNotebook, setCreatingNotebook] = useState(false);

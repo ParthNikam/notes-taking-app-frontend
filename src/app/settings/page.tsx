@@ -13,7 +13,7 @@ const ROLES = [
 ];
 
 export default function SettingsPage() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<unknown>(null);
   const [name, setName] = useState<string>("");
   const [avatar, setAvatar] = useState<string>("");
   const [role, setRole] = useState<string>(ROLES[0]);

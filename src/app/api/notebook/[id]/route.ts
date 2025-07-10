@@ -3,11 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+
+  const {id} = await params;
   console.log("\n=== FRONTEND GET NOTEBOOK API START ===");
-  console.log("Notebook ID:", params.id);
-  
+  console.log("Notebook ID:", id);
+
   const token = req.headers.get("authorization");
   console.log("Authorization header present:", !!token);
 
@@ -18,39 +20,44 @@ export async function GET(
   }
 
   try {
-    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/notebook/${params.id}`;
+    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/notebook/${id}`;
     console.log("Backend URL:", backendUrl);
-    
+
     const backendRes = await axios.get(backendUrl, {
-      headers: { Authorization: token }
+      headers: { Authorization: token },
     });
-    
+
     console.log("Backend response status:", backendRes.status);
     console.log("Backend response data:", backendRes.data);
     console.log("=== FRONTEND GET NOTEBOOK API SUCCESS ===");
-    
+
     return NextResponse.json(backendRes.data);
-    
   } catch (error) {
     console.log("=== FRONTEND GET NOTEBOOK API ERROR ===");
-    console.error("Error type:", error instanceof Error ? error.constructor.name : typeof error);
-    console.error("Error message:", error instanceof Error ? error.message : String(error));
-    
+    console.error(
+      "Error type:",
+      error instanceof Error ? error.constructor.name : typeof error
+    );
+    console.error(
+      "Error message:",
+      error instanceof Error ? error.message : String(error)
+    );
+
     if (axios.isAxiosError(error)) {
       console.log("Axios error detected");
       console.log("Response status:", error.response?.status);
       console.log("Response data:", error.response?.data);
-      
+
       const status = error.response?.status || 500;
       const data = error.response?.data || { message: "Server error" };
-      
+
       console.log("=== FRONTEND GET NOTEBOOK API END (Axios Error) ===");
       return NextResponse.json(data, { status });
     }
-    
+
     console.log("Non-Axios error");
     console.log("=== FRONTEND GET NOTEBOOK API END (Generic Error) ===");
-    
+
     return NextResponse.json(
       {
         message: "Server error",
@@ -59,4 +66,4 @@ export async function GET(
       { status: 500 }
     );
   }
-} 
+}

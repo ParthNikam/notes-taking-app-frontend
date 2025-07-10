@@ -1,33 +1,14 @@
 "use client";
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import AuthError from './AuthError';
+
 
 
 
 
 export default function SignupPage() {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const searchParams = useSearchParams();
-
-
-  useEffect(() => {
-    // Check for error in URL params
-    const errorParam = searchParams.get('error');
-    if (errorParam) {
-      switch (errorParam) {
-        case 'no_code':
-          setError('Authorization code not received from Google');
-          break;
-        case 'auth_failed':
-          setError('Authentication failed. Please try again.');
-          break;
-        default:
-          setError('An error occurred during authentication');
-      }
-    }
-  }, [searchParams]);
-
+ 
 
   const handleGoogleSignup = () => {
     setLoading(true);
@@ -58,7 +39,10 @@ export default function SignupPage() {
               </svg>
               {loading ? 'Redirecting...' : 'Continue with Google'}
             </button>
-            {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+            {/* add suspense boundary here  */}
+            <Suspense fallback={<div>Loading...</div>}>
+              <AuthError />
+            </Suspense>
           </div>
         </div>
       </div>

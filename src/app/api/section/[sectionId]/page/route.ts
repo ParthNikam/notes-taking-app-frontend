@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { sectionId: string } }
+  { params }: { params: Promise<{ sectionId: string }> }
 ) {
+  const { sectionId } = await params;
   console.log("\n=== FRONTEND CREATE PAGE API START ===");
-  console.log("Section ID:", params.sectionId);
+  console.log("Section ID:", sectionId);
   
   const token = req.headers.get("authorization");
   console.log("Authorization header present:", !!token);
@@ -21,7 +22,7 @@ export async function POST(
     const requestBody = await req.json();
     console.log("Request body:", requestBody);
     
-    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/section/${params.sectionId}/page`;
+    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/section/${sectionId}/page`;
     console.log("Backend URL:", backendUrl);
     
     const backendRes = await axios.post(backendUrl, requestBody, {

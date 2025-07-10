@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { pageId: string } }
+  { params }: { params: Promise<{ pageId: string }> }
 ) {
+  const { pageId } = await params;
   console.log("\n=== FRONTEND GET PAGE API START ===");
-  console.log("Page ID:", params.pageId);
+  console.log("Page ID:", pageId);
   
   const token = req.headers.get("authorization");
   console.log("Authorization header present:", !!token);
@@ -18,7 +19,7 @@ export async function GET(
   }
 
   try {
-    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/page/${params.pageId}`;
+    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/page/${pageId}`;
     console.log("Backend URL:", backendUrl);
     
     const backendRes = await axios.get(backendUrl, {
@@ -63,10 +64,11 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { pageId: string } }
+  { params }: { params: Promise<{ pageId: string }> }
 ) {
+  const { pageId } = await params;
   console.log("\n=== FRONTEND UPDATE PAGE API START ===");
-  console.log("Page ID:", params.pageId);
+  console.log("Page ID:", pageId);
   
   const token = req.headers.get("authorization");
   console.log("Authorization header present:", !!token);
@@ -81,7 +83,7 @@ export async function PUT(
     const requestBody = await req.json();
     console.log("Request body:", requestBody);
     
-    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/page/${params.pageId}`;
+    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/page/${pageId}`;
     console.log("Backend URL:", backendUrl);
     
     const backendRes = await axios.put(backendUrl, requestBody, {

@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { sectionId: string } }
+  { params }: { params: Promise<{ sectionId: string }> }
 ) {
+  const { sectionId } = await params;
   console.log("\n=== FRONTEND GET SECTION API START ===");
-  console.log("Section ID:", params.sectionId);
+  console.log("Section ID:", sectionId);
   
   const token = req.headers.get("authorization");
   console.log("Authorization header present:", !!token);
@@ -18,7 +19,7 @@ export async function GET(
   }
 
   try {
-    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/section/${params.sectionId}`;
+    const backendUrl = `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/section/${sectionId}`;
     console.log("Backend URL:", backendUrl);
     
     const backendRes = await axios.get(backendUrl, {
